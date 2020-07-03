@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: webmethods-production
+    app.kubernetes.io/component: webmethods-production
+    app.kubernetes.io/instance: webmethods-production
+    app.kubernetes.io/part-of: webmethods-production
+  name: webmethods-production
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 2
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: webmethods-production
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webmethods-production
+        deploymentconfig: webmethods-production
+    spec:
+      containers:
+      - image: quay.io/wdovey/softwareag:latest
+        imagePullPolicy: Always
+        name: webmethods-production
+        ports:
+        - containerPort: 5555
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30

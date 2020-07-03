@@ -1,0 +1,24 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  annotations:
+    openshift.io/host.generated: "true"
+    argocd.argoproj.io/sync-wave: "1"
+  creationTimestamp: null
+  labels:
+    app: webmethods-production
+    app.kubernetes.io/instance: webmethods-production    
+  name: webmethods-production
+spec:
+  host: webmethods.trafficmanager.net  
+  port:
+    targetPort: 5555-tcp
+  to:
+    kind: Service
+    name: webmethods-production
+    weight: 100
+status:
+  ingress:
+    - conditions:
+        - status: 'True'
+          type: Admitted
